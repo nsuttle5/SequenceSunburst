@@ -1,4 +1,5 @@
-var width = 750;
+// Reduce the sunburst svg width so legend + chart + icons fit comfortably
+var width = 600;
 var height = 600;
 var radius = Math.min(width, height) / 2;
 
@@ -41,11 +42,14 @@ var colors = {
 var totalSize = 0; 
 
 var vis = d3.select("#chart").append("svg:svg")
-    .attr("width", width)
-    .attr("height", height)
-    .append("svg:g")
-    .attr("id", "container")
-    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+  .attr("width", width)
+  .attr("height", height)
+  // make responsive: set viewBox so SVG scales down on smaller screens
+  .attr("viewBox", "0 0 " + width + " " + height)
+  .attr("preserveAspectRatio", "xMidYMid meet")
+  .append("svg:g")
+  .attr("id", "container")
+  .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 var partition = d3.layout.partition()
     .size([2 * Math.PI, radius * radius])
@@ -70,6 +74,8 @@ function createVisualization(json) {
 
   // Basic setup of page elements.
   initializeBreadcrumbTrail();
+  // create the icon panel that will react to hover events
+  createIconPanel();
   drawLegend();
   d3.select("#togglelegend").on("click", toggleLegend);
 
@@ -121,6 +127,8 @@ function mouseover(d) {
 
   var sequenceArray = getAncestors(d);
   updateBreadcrumbs(sequenceArray, percentageString);
+  // update the icon panel based on the hovered sequence
+  updateIconPanel(sequenceArray);
 
   // Fade all the segments.
   d3.selectAll("path")
@@ -157,6 +165,9 @@ function mouseleave(d) {
       .transition()
       .duration(1000)
       .style("visibility", "hidden");
+
+  // reset icon panel to default state
+  resetIconPanel();
 }
 
 // Given a node in a partition layout, return an array of all of its ancestor
@@ -272,6 +283,157 @@ function drawLegend() {
       .attr("dy", "0.35em")
       .attr("text-anchor", "middle")
       .text(function(d) { return d.key; });
+}
+
+// ---------------- Icon panel: create/update/reset -----------------
+function createIconPanel() {
+  // create an SVG inside the #iconPanel div
+  var w = 140, h = 600;
+  var svg = d3.select("#iconPanel").append("svg")
+      .attr("width", w)
+      .attr("height", h);
+
+  // Person (always visible)
+  var person = svg.append("g").attr("id", "icon-person").attr("transform", "translate(20,80)");
+  person.append("circle").attr("cx", 40).attr("cy", 40).attr("r", 16).style("fill", "#222");
+  person.append("rect").attr("x", 28).attr("y", 56).attr("width", 24).attr("height", 36).style("fill", "#222");
+  person.append("text").attr("x", 70).attr("y", 44).attr("class","icon-label").text("Person");
+
+  // Helmet (hidden unless Helmet Yes)
+  var helmet = svg.append("g").attr("id", "icon-helmet").attr("transform", "translate(20,40)");
+  helmet.append("path").attr("d", "M18,30 a28,18 0 0,1 44,0 L62,36 L10,36 Z").style("fill", "#555");
+  helmet.append("text").attr("x", 70).attr("y", 54).attr("class","icon-label").text("Helmet");
+  helmet.style("display", "none");
+
+  // Scooter
+  var scooter = svg.append("g").attr("id", "icon-scooter").attr("transform", "translate(0,160)");
+  scooter.append("rect").attr("x", 18).attr("y", 36).attr("width", 44).attr("height", 8).style("fill", "#333");
+  scooter.append("circle").attr("cx", 26).attr("cy", 56).attr("r", 8).style("fill", "#111");
+  scooter.append("circle").attr("cx", 62).attr("cy", 56).attr("r", 8).style("fill", "#111");
+  scooter.append("text").attr("x", 70).attr("y", 54).attr("class","icon-label").text("Scooter");
+  scooter.style("display", "none");
+
+  // Bike
+  var bike = svg.append("g").attr("id", "icon-bike").attr("transform", "translate(0,220)");
+  bike.append("circle").attr("cx", 26).attr("cy", 56).attr("r", 12).style("fill", "none").style("stroke", "#111").style("stroke-width", 2);
+  bike.append("circle").attr("cx", 62).attr("cy", 56).attr("r", 12).style("fill", "none").style("stroke", "#111").style("stroke-width", 2);
+  bike.append("line").attr("x1", 26).attr("y1", 56).attr("x2", 62).attr("y2", 56).style("stroke", "#111").style("stroke-width", 2);
+  bike.append("text").attr("x", 70).attr("y", 74).attr("class","icon-label").text("Bike");
+  bike.style("display", "none");
+
+  // Weather (cloud + raindrops/sun)
+  var weather = svg.append("g").attr("id", "icon-weather").attr("transform", "translate(0,8)");
+  var cloud = weather.append("g").attr("id","weather-cloud");
+  cloud.append("ellipse").attr("cx",48).attr("cy",20).attr("rx",22).attr("ry",12).style("fill","#bdbdbd");
+  cloud.append("ellipse").attr("cx",28).attr("cy",24).attr("rx",14).attr("ry",10).style("fill","#bdbdbd");
+  // raindrops
+  weather.append("g").attr("id","weather-rain").selectAll("circle").data([36,48,60]).enter()
+    .append("circle").attr("cx", function(d){return d;}).attr("cy",36).attr("r",3).style("fill","#2ca02c").style("display","none");
+  // sun for partly/cloudy
+  weather.append("circle").attr("id","weather-sun").attr("cx",18).attr("cy",6).attr("r",6).style("fill","#ffcc33").style("display","none");
+  weather.append("text").attr("x", 70).attr("y", 34).attr("class","icon-label").text("Weather");
+  weather.style("display", "none");
+
+  // Speedometer
+  var speed = svg.append("g").attr("id", "icon-speed").attr("transform", "translate(0,320)");
+  // semicircle arc background
+  speed.append("path").attr("d","M12,60 A48,48 0 0,1 84,60").style("fill","none").style("stroke","#999").style("stroke-width",4);
+  // needle
+  speed.append("line").attr("id","speed-needle").attr("x1",48).attr("y1",60).attr("x2",48).attr("y2",22).style("stroke","#d62728").style("stroke-width",3).attr("transform","rotate(20,48,60)");
+  speed.append("text").attr("x", 70).attr("y", 64).attr("class","icon-label").text("Speed");
+  speed.style("display", "none");
+
+  // Location label
+  var location = svg.append("g").attr("id", "icon-location").attr("transform", "translate(0,400)");
+  location.append("circle").attr("cx",48).attr("cy",24).attr("r",10).style("fill","#7b615c");
+  location.append("path").attr("d","M48,36 L40,24 A12,12 0 0,1 56,24 Z").style("fill","#7b615c");
+  location.append("text").attr("id","location-label").attr("x", 70).attr("y", 34).attr("class","icon-label").text("");
+  location.style("display", "none");
+}
+
+function updateIconPanel(nodeArray) {
+  // nodeArray is highest-first array of ancestor nodes (excludes root)
+  if (!nodeArray) return;
+  // show person always
+  d3.select("#icon-person").style("display", null);
+
+  // VEHICLE
+  var hasScooter = nodeArray.some(function(n){ return n.name === "Scooter"; });
+  var hasBike = nodeArray.some(function(n){ return n.name === "Bike"; });
+  d3.select("#icon-scooter").style("display", hasScooter ? null : "none");
+  d3.select("#icon-bike").style("display", hasBike ? null : "none");
+
+  // HELMET
+  var hasHelmetYes = nodeArray.some(function(n){ return n.name === "Helmet Yes"; });
+  d3.select("#icon-helmet").style("display", hasHelmetYes ? null : "none");
+
+  // SPEED
+  var speedNames = ["Low Speed","Med Speed","Normal Speed","High Speed"];
+  var foundSpeed = null;
+  for (var i=0;i<speedNames.length;i++) {
+    if (nodeArray.some(function(n){ return n.name === speedNames[i]; })) { foundSpeed = speedNames[i]; break; }
+  }
+  if (foundSpeed) {
+    d3.select("#icon-speed").style("display", null);
+    var angle = 20; // default Normal
+    if (foundSpeed === "Low Speed") angle = -60;
+    else if (foundSpeed === "Med Speed") angle = -20;
+    else if (foundSpeed === "Normal Speed") angle = 20;
+    else if (foundSpeed === "High Speed") angle = 60;
+    d3.select("#speed-needle").attr("transform", "rotate("+angle+",48,60)");
+  } else {
+    d3.select("#icon-speed").style("display", "none");
+  }
+
+  // WEATHER
+  var weatherTypes = ["Drizzle","Cloudy","Rainy","Overcast","Partly Cloudy"];
+  var foundWeather = null;
+  for (var j=0;j<weatherTypes.length;j++) {
+    if (nodeArray.some(function(n){ return n.name === weatherTypes[j]; })) { foundWeather = weatherTypes[j]; break; }
+  }
+  if (foundWeather) {
+    d3.select("#icon-weather").style("display", null);
+    // show/hide rain or sun
+    if (foundWeather === "Rainy" || foundWeather === "Drizzle") {
+      d3.selectAll("#weather-rain circle").style("display", null);
+      d3.select("#weather-sun").style("display", "none");
+    } else if (foundWeather === "Partly Cloudy") {
+      d3.selectAll("#weather-rain circle").style("display", "none");
+      d3.select("#weather-sun").style("display", null);
+    } else {
+      d3.selectAll("#weather-rain circle").style("display", "none");
+      d3.select("#weather-sun").style("display", "none");
+    }
+  } else {
+    d3.select("#icon-weather").style("display", "none");
+  }
+
+  // LOCATION
+  var locationNames = ["Student Center","North Avenue","CULC","Tech Green"];
+  var foundLocation = null;
+  for (var k=0;k<locationNames.length;k++) {
+    if (nodeArray.some(function(n){ return n.name === locationNames[k]; })) { foundLocation = locationNames[k]; break; }
+  }
+  if (foundLocation) {
+    d3.select("#icon-location").style("display", null);
+    d3.select("#location-label").text(foundLocation);
+  } else {
+    d3.select("#icon-location").style("display", "none");
+  }
+}
+
+function resetIconPanel() {
+  // person stays visible; hide everything else
+  d3.select("#icon-person").style("display", null);
+  d3.select("#icon-helmet").style("display", "none");
+  d3.select("#icon-scooter").style("display", "none");
+  d3.select("#icon-bike").style("display", "none");
+  d3.select("#icon-weather").style("display", "none");
+  d3.selectAll("#weather-rain circle").style("display", "none");
+  d3.select("#weather-sun").style("display", "none");
+  d3.select("#icon-speed").style("display", "none");
+  d3.select("#speed-needle").attr("transform", "rotate(20,48,60)");
+  d3.select("#icon-location").style("display", "none");
 }
 
 function toggleLegend() {

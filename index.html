@@ -18,10 +18,14 @@
           of transportation events follow this pattern
         </div>
       </div>
-    </div>
-    <div id="sidebar">
-      <input type="checkbox" id="togglelegend" checked> Show Legend<br/>
-      <div id="legend"></div>
+      <!-- Icon panel: shows person, vehicle, helmet, weather, and speed icons
+           that correspond to the currently hovered sequence in the sunburst -->
+      <div id="iconPanel"></div>
+      <!-- Legend container moved into main so it can sit to the left of the chart -->
+      <div id="legendContainer">
+        <input type="checkbox" id="togglelegend" checked> Show Legend<br/>
+        <div id="legend"></div>
+      </div>
     </div>
     <script type="text/javascript" src="sequences.js"></script>
     <script type="text/javascript">

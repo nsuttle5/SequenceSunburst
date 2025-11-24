@@ -9,7 +9,11 @@ body {
 }
 
 #main {
-  float: left;
+  /* layout main area as a horizontal flex container so the chart and icon
+     panel sit side-by-side */
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
   width: 750px;
 }
 
@@ -19,8 +23,40 @@ body {
 }
 
 #sequence {
-  width: 600px;
+  /* breadcrumb takes full row above the chart and icons */
+  flex-basis: 100%;
+  width: 100%;
   height: 70px;
+}
+
+#legendContainer {
+  /* narrow column to the left of the chart for legend */
+  width: 140px;
+  margin-right: 8px;
+  align-self: flex-start;
+}
+
+#legendContainer input {
+  margin-left: 6px;
+}
+
+#iconPanel {
+  /* sit to the right of the chart */
+  width: 180px;
+  height: 600px;
+  margin-left: 8px;
+  text-align: center;
+  align-self: flex-start;
+}
+
+#iconPanel svg {
+  width: 180px;
+  height: 600px;
+}
+
+.icon-label {
+  font-size: 12px;
+  fill: #003057;
 }
 
 #legend {
@@ -36,6 +72,10 @@ body {
 #chart {
   position: relative;
 }
+#chart {
+  /* allow chart area to take remaining horizontal space */
+  flex: 1 1 auto;
+}
 
 #chart path {
   stroke: #fff;
@@ -43,12 +83,15 @@ body {
 
 #explanation {
   position: absolute;
-  top: 260px;
-  left: 305px;
-  width: 140px;
+  /* center the explanation inside the chart SVG regardless of chart size */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 160px;
   text-align: center;
   color: #666;
-  z-index: -1;
+  z-index: 1;
+  pointer-events: none; /* allow mouse events to pass through to the chart */
 }
 
 #percentage {
