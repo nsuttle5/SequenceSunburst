@@ -1,57 +1,57 @@
-Student Center|Drizzle|Scooter|Helmet No|High Speed,2
-Student Center|Drizzle|Scooter|Helmet No|Normal Speed,2
-Student Center|Drizzle|Scooter|Helmet No|Low Speed,2
-Student Center|Cloudy|Scooter|Helmet No|High Speed,7
-Student Center|Cloudy|Scooter|Helmet No|Normal Speed,7
-Student Center|Cloudy|Scooter|Helmet Yes|High Speed,2
-Student Center|Cloudy|Scooter|Helmet Yes|Normal Speed,2
-Student Center|Cloudy|Bike|Helmet No|High Speed,6
-Student Center|Cloudy|Bike|Helmet No|Normal Speed,6
-Student Center|Cloudy|Bike|Helmet Yes|High Speed,3
-Student Center|Cloudy|Bike|Helmet Yes|Normal Speed,3
-Student Center|Cloudy|Scooter|Helmet No|High Speed,8
-Student Center|Cloudy|Scooter|Helmet No|Normal Speed,7
-Student Center|Rainy|Scooter|Helmet No|High Speed,1
-Student Center|Rainy|Scooter|Helmet No|Normal Speed,1
-Student Center|Rainy|Bike|Helmet No|Normal Speed,1
-North Avenue|Rainy|Scooter|Helmet Yes|High Speed,12
-North Avenue|Rainy|Scooter|Helmet Yes|Normal Speed,8
-North Avenue|Rainy|Scooter|Helmet No|High Speed,10
-North Avenue|Rainy|Scooter|Helmet No|Normal Speed,6
-North Avenue|Rainy|Bike|Helmet Yes|High Speed,9
-North Avenue|Rainy|Bike|Helmet Yes|Normal Speed,5
-North Avenue|Rainy|Bike|Helmet No|High Speed,7
-North Avenue|Rainy|Bike|Helmet No|Normal Speed,3
-North Avenue|Overcast|Scooter|Helmet No|High Speed,3
-North Avenue|Overcast|Scooter|Helmet No|Normal Speed,2
-North Avenue|Overcast|Bike|Helmet No|Normal Speed,1
-North Avenue|Partly Cloudy|Scooter|Helmet Yes|High Speed,2
-North Avenue|Partly Cloudy|Scooter|Helmet Yes|Normal Speed,1
-North Avenue|Partly Cloudy|Bike|Helmet Yes|Normal Speed,1
-North Avenue|Cloudy|Scooter|Helmet No|High Speed,11
-North Avenue|Cloudy|Scooter|Helmet No|Normal Speed,8
-North Avenue|Cloudy|Scooter|Helmet Yes|High Speed,4
-North Avenue|Cloudy|Scooter|Helmet Yes|Normal Speed,2
-North Avenue|Cloudy|Bike|Helmet No|Normal Speed,2
-North Avenue|Cloudy|Bike|Helmet Yes|Normal Speed,1
-CULC|Overcast|Scooter|Helmet No|High Speed,1
-CULC|Overcast|Scooter|Helmet No|Normal Speed,2
-CULC|Overcast|Scooter|Helmet Yes|Normal Speed,1
-CULC|Overcast|Bike|Helmet No|Normal Speed,1
-CULC|Overcast|Bike|Helmet Yes|Normal Speed,1
-CULC|Rainy|Scooter|Helmet No|High Speed,2
-CULC|Rainy|Scooter|Helmet No|Normal Speed,4
-CULC|Rainy|Scooter|Helmet Yes|High Speed,1
-CULC|Rainy|Bike|Helmet No|High Speed,1
-CULC|Rainy|Bike|Helmet No|Normal Speed,2
-CULC|Rainy|Bike|Helmet Yes|Normal Speed,1
-CULC|Cloudy|Scooter|Helmet No|High Speed,2
-CULC|Cloudy|Scooter|Helmet Yes|High Speed,1
-CULC|Cloudy|Bike|Helmet No|Normal Speed,1
-CULC|Cloudy|Bike|Helmet Yes|Normal Speed,1
-Tech Green|Cloudy|Scooter|Helmet No|High Speed,8
-Tech Green|Cloudy|Scooter|Helmet No|Med Speed,6
-Tech Green|Cloudy|Scooter|Helmet No|Low Speed,4
-Tech Green|Cloudy|Bike|Helmet No|High Speed,4
-Tech Green|Cloudy|Bike|Helmet No|Med Speed,3
-Tech Green|Cloudy|Bike|Helmet No|Low Speed,2
+Student Center|Scooter|Helmet No|High Speed,2
+Student Center|Scooter|Helmet No|Normal Speed,2
+Student Center|Scooter|Helmet No|Low Speed,2
+Student Center|Scooter|Helmet No|High Speed,7
+Student Center|Scooter|Helmet No|Normal Speed,7
+Student Center|Scooter|Helmet Yes|High Speed,2
+Student Center|Scooter|Helmet Yes|Normal Speed,2
+Student Center|Bike|Helmet No|High Speed,6
+Student Center|Bike|Helmet No|Normal Speed,6
+Student Center|Bike|Helmet Yes|High Speed,3
+Student Center|Bike|Helmet Yes|Normal Speed,3
+Student Center|Scooter|Helmet No|High Speed,8
+Student Center|Scooter|Helmet No|Normal Speed,7
+Student Center|Scooter|Helmet No|High Speed,1
+Student Center|Scooter|Helmet No|Normal Speed,1
+Student Center|Bike|Helmet No|Normal Speed,1
+North Avenue|Scooter|Helmet Yes|High Speed,12
+North Avenue|Scooter|Helmet Yes|Normal Speed,8
+North Avenue|Scooter|Helmet No|High Speed,10
+North Avenue|Scooter|Helmet No|Normal Speed,6
+North Avenue|Bike|Helmet Yes|High Speed,9
+North Avenue|Bike|Helmet Yes|Normal Speed,5
+North Avenue|Bike|Helmet No|High Speed,7
+North Avenue|Bike|Helmet No|Normal Speed,3
+North Avenue|Scooter|Helmet No|High Speed,3
+North Avenue|Scooter|Helmet No|Normal Speed,2
+North Avenue|Bike|Helmet No|Normal Speed,1
+North Avenue|Scooter|Helmet Yes|High Speed,2
+North Avenue|Scooter|Helmet Yes|Normal Speed,1
+North Avenue|Bike|Helmet Yes|Normal Speed,1
+North Avenue|Scooter|Helmet No|High Speed,11
+North Avenue|Scooter|Helmet No|Normal Speed,8
+North Avenue|Scooter|Helmet Yes|High Speed,4
+North Avenue|Scooter|Helmet Yes|Normal Speed,2
+North Avenue|Bike|Helmet No|Normal Speed,2
+North Avenue|Bike|Helmet Yes|Normal Speed,1
+CULC|Scooter|Helmet No|High Speed,1
+CULC|Scooter|Helmet No|Normal Speed,2
+CULC|Scooter|Helmet Yes|Normal Speed,1
+CULC|Bike|Helmet No|Normal Speed,1
+CULC|Bike|Helmet Yes|Normal Speed,1
+CULC|Scooter|Helmet No|High Speed,2
+CULC|Scooter|Helmet No|Normal Speed,4
+CULC|Scooter|Helmet Yes|High Speed,1
+CULC|Bike|Helmet No|High Speed,1
+CULC|Bike|Helmet No|Normal Speed,2
+CULC|Bike|Helmet Yes|Normal Speed,1
+CULC|Scooter|Helmet No|High Speed,2
+CULC|Scooter|Helmet Yes|High Speed,1
+CULC|Bike|Helmet No|Normal Speed,1
+CULC|Bike|Helmet Yes|Normal Speed,1
+Tech Green|Scooter|Helmet No|High Speed,8
+Tech Green|Scooter|Helmet No|Med Speed,6
+Tech Green|Scooter|Helmet No|Low Speed,4
+Tech Green|Bike|Helmet No|High Speed,4
+Tech Green|Bike|Helmet No|Med Speed,3
+Tech Green|Bike|Helmet No|Low Speed,2

@@ -3,8 +3,8 @@ body {
   font-size: 12px;
   font-weight: 400;
   background-color: #fff;
-  width: 960px;
-  height: 700px;
+  width: 1920px;
+  height: 1080px;
   margin-top: 10px;
 }
 
@@ -27,6 +27,7 @@ body {
   flex-basis: 100%;
   width: 100%;
   height: 70px;
+  margin-left: 53px;
 }
 
 #legendContainer {
@@ -75,6 +76,9 @@ body {
 #chart {
   /* allow chart area to take remaining horizontal space */
   flex: 1 1 auto;
+  margin-top: 80px;
+  margin-left: 100px;
+  
 }
 
 #chart path {
@@ -102,4 +106,28 @@ body {
 h1 {
   font-family: 'Open Sans', sans-serif;
   color: #003057;
+}
+
+#aboutSection {
+  font-family: 'Open Sans', sans-serif;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  border: 1px solid #e0e0e0;
+  width: 1385px;
+  margin-top: 340px;
+  margin-left: -750px;
+  margin-right: -600px;
+}
+
+#aboutSection h3 {
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  font-size: 16px;
+}
+
+#aboutSection p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
 }

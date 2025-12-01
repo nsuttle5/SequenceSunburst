@@ -11,32 +11,184 @@ var b = {
 // Comprehensive color mapping for ALL categories
 var colors = {
   // Locations
-  "Student Center": "#5687d1",
-  "North Avenue": "#7b615c", 
-  "CULC": "#de783b",
-  "Tech Green": "#6ab975",
+  "Student Center": "#C59353",
+  "North Avenue": "#EEB211", 
+  "CULC": "#00254c",
+  "Tech Green": "#38393eff",
+  };
+
+// Function to generate shades for each location
+function getColor(d) {
+  // If this is a location node, use the base color
+  if (locationColors[d.name]) {
+    return locationColors[d.name];
+  }
   
-  // Vehicle Types
-  "Scooter": "#a173d1",
-  "Bike": "#bbbbbb",
+  // Find the location in the node's ancestry
+  var node = d;
+  var locationName = null;
+  while (node.parent) {
+    if (locationColors[node.name]) {
+      locationName = node.name;
+      break;
+    }
+    node = node.parent;
+  }
   
-  // Helmet Usage
-  "Helmet Yes": "#2ca02c",
-  "Helmet No": "#d62728",
+  if (!locationName) {
+    return "#cccccc"; // Fallback color
+  }
   
-  // Speed Levels
-  "High Speed": "#ff7f0e",
-  "Normal Speed": "#1f77b4",
-  "Med Speed": "#9467bd",
-  "Low Speed": "#8c564b",
+  var baseColor = locationColors[locationName];
   
-  // Weather Conditions (simplified)
-  "Drizzle": "#17becf",
-  "Cloudy": "#bcbd22", 
-  "Rainy": "#1f77b4",
-  "Overcast": "#c5b0d5",
-  "Partly Cloudy": "#dbdb8d"
+  // Generate different shades based on the category type and depth
+  var shade = getShadeForCategory(d.name, d.depth);
+  return adjustColorShade(baseColor, shade);
+}
+
+// Function to determine shade based on category type
+function getShadeForCategory(categoryName, depth) {
+  // Define shade multipliers for different category types
+  var shades = {
+    // Vehicle types - medium shades
+    "Scooter": 0.7,
+    "Bike": 0.5,
+    
+    // Helmet usage - lighter/darker shades
+    "Helmet Yes": 1.3, // lighter
+    "Helmet No": 0.3,  // darker
+    
+    // Speed levels - various shades
+    "High Speed": 0.2,   // darkest
+    "Normal Speed": 0.6, // medium
+    "Med Speed": 0.8,    // lighter medium  
+    "Low Speed": 1.1,    // light
+    
+    // Weather conditions - various shades (keeping for now)
+    "Drizzle": 0.9,
+    "Cloudy": 0.7,
+    "Rainy": 0.4,
+    "Overcast": 0.6,
+    "Partly Cloudy": 1.2
+  };
+  
+  return shades[categoryName] || 0.8; // Default medium shade
+}
+
+// Function to adjust color shade (lighten/darken)
+function adjustColorShade(hex, shade) {
+  // Convert hex to RGB
+  var r = parseInt(hex.slice(1, 3), 16);
+  var g = parseInt(hex.slice(3, 5), 16);
+  var b = parseInt(hex.slice(5, 7), 16);
+  
+  // Adjust each component by the shade multiplier
+  r = Math.min(255, Math.max(0, Math.round(r * shade)));
+  g = Math.min(255, Math.max(0, Math.round(g * shade)));
+  b = Math.min(255, Math.max(0, Math.round(b * shade)));
+  
+  // Convert back to hex
+  return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+// Total size of all segments; we set this later, after loading the data.
+// Reduce the sunburst svg width so legend + chart + icons fit comfortably
+var width = 800;
+var height = 800;
+var radius = Math.min(width, height) / 2;
+
+// Breadcrumb dimensions: width, height, spacing, width of tip/tail.
+var b = {
+  w: 75, h: 30, s: 3, t: 10
 };
+
+// Location-based color mapping
+var locationColors = {
+  "Student Center": "#C59353",
+  "North Avenue": "#EEB211", 
+  "CULC": "#00254c",
+  "Tech Green": "#38393eff"
+};
+
+function getColor(d) {
+  // If this is a location node, use the base color
+  if (locationColors[d.name]) {
+    return locationColors[d.name];
+  }
+  
+  // Find the location in the node's ancestry
+  var node = d;
+  var locationName = null;
+  while (node.parent) {
+    if (locationColors[node.name]) {
+      locationName = node.name;
+      break;
+    }
+    node = node.parent;
+  }
+  
+  if (!locationName) {
+    return "#cccccc"; // Fallback color
+  }
+  
+  var baseColor = locationColors[locationName];
+  
+  // Generate lighter shades based on depth (farther from center = lighter)
+  var shade = getShadeForCategory(d.name, d.depth);
+  return adjustColorShade(baseColor, shade);
+}
+
+// Function to determine shade based on category type and depth
+function getShadeForCategory(categoryName, depth) {
+  // Base shade multipliers for different category types
+  var baseShades = {
+    // Vehicle types - start with medium-light shades
+    "Scooter": 1.2,
+    "Bike": 1.4,
+    
+    // Helmet usage - lighter shades
+    "Helmet Yes": 1.6,
+    "Helmet No": 1.8,
+    
+    // Speed levels - various light shades
+    "High Speed": 2.0,   // lightest
+    "Normal Speed": 1.8, // light
+    "Med Speed": 1.6,    // medium-light  
+    "Low Speed": 1.4,    // slightly light
+    
+    // Weather conditions - light shades
+    "Drizzle": 1.5,
+    "Cloudy": 1.3,
+    "Rainy": 1.7,
+    "Overcast": 1.4,
+    "Partly Cloudy": 1.9
+  };
+  
+  var baseShade = baseShades[categoryName] || 1.5; // Default medium-light shade
+  
+  // Make shades progressively lighter with depth
+  // Each level out from center gets 10% lighter
+  var depthMultiplier = 1 + (depth * 0.1);
+  
+  return baseShade * depthMultiplier;
+}
+
+// Function to adjust color shade (lighten/darken)
+function adjustColorShade(hex, shade) {
+  // Convert hex to RGB
+  var r = parseInt(hex.slice(1, 3), 16);
+  var g = parseInt(hex.slice(3, 5), 16);
+  var b = parseInt(hex.slice(5, 7), 16);
+  
+  // Adjust each component by the shade multiplier
+  // For lightening, we need to move toward white (255)
+  r = Math.min(255, Math.max(0, Math.round(255 - (255 - r) / shade)));
+  g = Math.min(255, Math.max(0, Math.round(255 - (255 - g) / shade)));
+  b = Math.min(255, Math.max(0, Math.round(255 - (255 - b) / shade)));
+  
+  // Convert back to hex
+  return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
 
 // Total size of all segments; we set this later, after loading the data.
 var totalSize = 0; 
@@ -98,7 +250,7 @@ function createVisualization(json) {
       .attr("d", arc)
       .attr("fill-rule", "evenodd")
       .style("fill", function(d) { 
-        return colors[d.name] || "#cccccc"; // Fallback color
+        return getColor(d); // Use the getColor function instead of colors[d.name]
       })
       .style("opacity", 1)
       .on("mouseover", mouseover);
@@ -221,13 +373,22 @@ function updateBreadcrumbs(nodeArray, percentageString) {
 
   entering.append("svg:polygon")
       .attr("points", breadcrumbPoints)
-      .style("fill", function(d) { return colors[d.name] || "#cccccc"; });
+      .style("fill", function(d) { return getColor(d); }); // Use getColor here
 
   entering.append("svg:text")
       .attr("x", (b.w + b.t) / 2)
       .attr("y", b.h / 2)
       .attr("dy", "0.35em")
       .attr("text-anchor", "middle")
+      .style("fill", function(d) {
+        // Use white text for dark backgrounds, black for light backgrounds
+        var color = getColor(d);
+        var r = parseInt(color.slice(1, 3), 16);
+        var g = parseInt(color.slice(3, 5), 16);
+        var b = parseInt(color.slice(5, 7), 16);
+        var brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        return brightness > 125 ? "#000000" : "#ffffff";
+      })
       .text(function(d) { return d.name; });
 
   // Set position for entering and updating nodes.
@@ -253,37 +414,85 @@ function updateBreadcrumbs(nodeArray, percentageString) {
 }
 
 function drawLegend() {
+  // Clear any existing legend
+  d3.select("#legend").html("");
 
   // Dimensions of legend item: width, height, spacing, radius of rounded rect.
   var li = {
-    w: 100, h: 30, s: 3, r: 3
+    w: 120, h: 25, s: 3, r: 3
   };
+
+  // Create sample data for all categories that appear in the visualization
+  var legendData = [
+    // Locations
+    { name: "Student Center", depth: 1 },
+    { name: "North Avenue", depth: 1 },
+    { name: "CULC", depth: 1 },
+    { name: "Tech Green", depth: 1 },
+    
+    // Vehicle Types
+    { name: "Scooter", depth: 2 },
+    { name: "Bike", depth: 2 },
+    
+    // Helmet Usage
+    { name: "Helmet Yes", depth: 3 },
+    { name: "Helmet No", depth: 3 },
+    
+    // Speed Levels
+    { name: "High Speed", depth: 4 },
+    { name: "Normal Speed", depth: 4 },
+    { name: "Med Speed", depth: 4 },
+    { name: "Low Speed", depth: 4 },
+    
+    // Weather Conditions
+    { name: "Drizzle", depth: 2 },
+    { name: "Cloudy", depth: 2 },
+    { name: "Rainy", depth: 2 },
+    { name: "Overcast", depth: 2 },
+    { name: "Partly Cloudy", depth: 2 }
+  ];
 
   var legend = d3.select("#legend").append("svg:svg")
       .attr("width", li.w + 20)
-      .attr("height", d3.keys(colors).length * (li.h + li.s));
+      .attr("height", legendData.length * (li.h + li.s));
 
   var g = legend.selectAll("g")
-      .data(d3.entries(colors))
+      .data(legendData)
       .enter().append("svg:g")
       .attr("transform", function(d, i) {
-              return "translate(0," + i * (li.h + li.s) + ")";
-           });
+        return "translate(0," + i * (li.h + li.s) + ")";
+      });
 
   g.append("svg:rect")
       .attr("rx", li.r)
       .attr("ry", li.r)
       .attr("width", li.w)
       .attr("height", li.h)
-      .style("fill", function(d) { return d.value; });
+      .style("fill", function(d) { 
+        // Create a mock node object to pass to getColor
+        var mockNode = { name: d.name, depth: d.depth, parent: null };
+        return getColor(mockNode);
+      });
 
   g.append("svg:text")
       .attr("x", li.w / 2)
       .attr("y", li.h / 2)
       .attr("dy", "0.35em")
       .attr("text-anchor", "middle")
-      .text(function(d) { return d.key; });
+      .style("fill", function(d) {
+        // Use white text for dark backgrounds, black for light backgrounds
+        var mockNode = { name: d.name, depth: d.depth, parent: null };
+        var color = getColor(mockNode);
+        // Simple brightness calculation
+        var r = parseInt(color.slice(1, 3), 16);
+        var g = parseInt(color.slice(3, 5), 16);
+        var b = parseInt(color.slice(5, 7), 16);
+        var brightness = (r * 299 + g * 587 + b * 114) / 1000;
+        return brightness > 125 ? "#000000" : "#ffffff";
+      })
+      .text(function(d) { return d.name; });
 }
+
 
 // ---------------- Icon panel: create/update/reset -----------------
 function createIconPanel() {
