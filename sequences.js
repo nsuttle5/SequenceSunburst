@@ -502,60 +502,107 @@ function createIconPanel() {
       .attr("width", w)
       .attr("height", h);
 
-  // Person (always visible)
+  // Person (always visible) - using image instead of vector art
   var person = svg.append("g").attr("id", "icon-person").attr("transform", "translate(20,80)");
-  person.append("circle").attr("cx", 40).attr("cy", 40).attr("r", 16).style("fill", "#222");
-  person.append("rect").attr("x", 28).attr("y", 56).attr("width", 24).attr("height", 36).style("fill", "#222");
-  person.append("text").attr("x", 70).attr("y", 44).attr("class","icon-label").text("Person");
+  person.append("image")
+    .attr("xlink:href", "images/person.png")  // Update path to your image
+    .attr("x", 12)
+    .attr("y", 8)
+    .attr("width", 56)   // Same scale as original vector (combined width)
+    .attr("height", 92); // Same scale as original vector (head + body height)
+  person.append("text").attr("x", 70).attr("y", 54).attr("class","icon-label").text("Person");
 
-  // Helmet (hidden unless Helmet Yes)
+  // Helmet (hidden unless Helmet Yes) - using image
   var helmet = svg.append("g").attr("id", "icon-helmet").attr("transform", "translate(20,40)");
-  helmet.append("path").attr("d", "M18,30 a28,18 0 0,1 44,0 L62,36 L10,36 Z").style("fill", "#555");
+  helmet.append("image")
+    .attr("xlink:href", "images/helmet.png")  // Update path to your image
+    .attr("x", 10)
+    .attr("y", 30)
+    .attr("width", 52)   // Same scale as original path width
+    .attr("height", 24); // Same scale as original path height
   helmet.append("text").attr("x", 70).attr("y", 54).attr("class","icon-label").text("Helmet");
   helmet.style("display", "none");
 
-  // Scooter
+  // Scooter - using image
   var scooter = svg.append("g").attr("id", "icon-scooter").attr("transform", "translate(0,160)");
-  scooter.append("rect").attr("x", 18).attr("y", 36).attr("width", 44).attr("height", 8).style("fill", "#333");
-  scooter.append("circle").attr("cx", 26).attr("cy", 56).attr("r", 8).style("fill", "#111");
-  scooter.append("circle").attr("cx", 62).attr("cy", 56).attr("r", 8).style("fill", "#111");
+  scooter.append("image")
+    .attr("xlink:href", "images/scooter.png")  // Update path to your image
+    .attr("x", 10)
+    .attr("y", 28)
+    .attr("width", 60)   // Same scale as original (body + wheels)
+    .attr("height", 36); // Same scale as original
   scooter.append("text").attr("x", 70).attr("y", 54).attr("class","icon-label").text("Scooter");
   scooter.style("display", "none");
 
-  // Bike
+  // Bike - using image
   var bike = svg.append("g").attr("id", "icon-bike").attr("transform", "translate(0,220)");
-  bike.append("circle").attr("cx", 26).attr("cy", 56).attr("r", 12).style("fill", "none").style("stroke", "#111").style("stroke-width", 2);
-  bike.append("circle").attr("cx", 62).attr("cy", 56).attr("r", 12).style("fill", "none").style("stroke", "#111").style("stroke-width", 2);
-  bike.append("line").attr("x1", 26).attr("y1", 56).attr("x2", 62).attr("y2", 56).style("stroke", "#111").style("stroke-width", 2);
+  bike.append("image")
+    .attr("xlink:href", "images/bike.png")  // Update path to your image
+    .attr("x", 10)
+    .attr("y", 32)
+    .attr("width", 64)   // Same scale as original (two wheels + frame)
+    .attr("height", 48); // Same scale as original
   bike.append("text").attr("x", 70).attr("y", 74).attr("class","icon-label").text("Bike");
   bike.style("display", "none");
 
-  // Weather (cloud + raindrops/sun)
+  // Weather - using images for different weather conditions
   var weather = svg.append("g").attr("id", "icon-weather").attr("transform", "translate(0,8)");
-  var cloud = weather.append("g").attr("id","weather-cloud");
-  cloud.append("ellipse").attr("cx",48).attr("cy",20).attr("rx",22).attr("ry",12).style("fill","#bdbdbd");
-  cloud.append("ellipse").attr("cx",28).attr("cy",24).attr("rx",14).attr("ry",10).style("fill","#bdbdbd");
-  // raindrops
-  weather.append("g").attr("id","weather-rain").selectAll("circle").data([36,48,60]).enter()
-    .append("circle").attr("cx", function(d){return d;}).attr("cy",36).attr("r",3).style("fill","#2ca02c").style("display","none");
-  // sun for partly/cloudy
-  weather.append("circle").attr("id","weather-sun").attr("cx",18).attr("cy",6).attr("r",6).style("fill","#ffcc33").style("display","none");
+  // Cloud image (base weather icon)
+  weather.append("image")
+    .attr("id", "weather-cloud")
+    .attr("xlink:href", "images/cloud.png")  // Update path to your image
+    .attr("x", 14)
+    .attr("y", 8)
+    .attr("width", 56)   // Same scale as original cloud ellipses
+    .attr("height", 28);
+  // Rain overlay (shown for rainy/drizzle)
+  weather.append("image")
+    .attr("id", "weather-rain")
+    .attr("xlink:href", "images/rain.png")  // Update path to your image
+    .attr("x", 28)
+    .attr("y", 32)
+    .attr("width", 36)   // Same scale as original raindrops
+    .attr("height", 12)
+    .style("display", "none");
+  // Sun overlay (shown for partly cloudy)
+  weather.append("image")
+    .attr("id", "weather-sun")
+    .attr("xlink:href", "images/sun.png")  // Update path to your image
+    .attr("x", 12)
+    .attr("y", 0)
+    .attr("width", 16)   // Same scale as original sun circle
+    .attr("height", 16)
+    .style("display", "none");
   weather.append("text").attr("x", 70).attr("y", 34).attr("class","icon-label").text("Weather");
   weather.style("display", "none");
 
-  // Speedometer
+  // Speedometer - using image
   var speed = svg.append("g").attr("id", "icon-speed").attr("transform", "translate(0,320)");
-  // semicircle arc background
-  speed.append("path").attr("d","M12,60 A48,48 0 0,1 84,60").style("fill","none").style("stroke","#999").style("stroke-width",4);
-  // needle
-  speed.append("line").attr("id","speed-needle").attr("x1",48).attr("y1",60).attr("x2",48).attr("y2",22).style("stroke","#d62728").style("stroke-width",3).attr("transform","rotate(20,48,60)");
+  speed.append("image")
+    .attr("xlink:href", "images/speedometer.png")  // Update path to your image
+    .attr("x", 12)
+    .attr("y", 12)
+    .attr("width", 72)   // Same scale as original arc
+    .attr("height", 60);
+  // Optional: Keep needle as SVG for animation, or use rotated image
+  speed.append("line")
+    .attr("id","speed-needle")
+    .attr("x1",48).attr("y1",60)
+    .attr("x2",48).attr("y2",22)
+    .style("stroke","#d62728")
+    .style("stroke-width",3)
+    .attr("transform","rotate(20,48,60)");
   speed.append("text").attr("x", 70).attr("y", 64).attr("class","icon-label").text("Speed");
   speed.style("display", "none");
 
-  // Location label
+  // Location pin - using image
   var location = svg.append("g").attr("id", "icon-location").attr("transform", "translate(0,400)");
-  location.append("circle").attr("cx",48).attr("cy",24).attr("r",10).style("fill","#7b615c");
-  location.append("path").attr("d","M48,36 L40,24 A12,12 0 0,1 56,24 Z").style("fill","#7b615c");
+  location.append("image")
+    .attr("xlink:href", "images/location.png")  // Update path to your image
+    .attr("x", 32)
+    .attr("y", 14)
+    .attr("width", 32)   // Same scale as original pin
+    .attr("height", 32);
   location.append("text").attr("id","location-label").attr("x", 70).attr("y", 34).attr("class","icon-label").text("");
   location.style("display", "none");
 }
@@ -604,13 +651,13 @@ function updateIconPanel(nodeArray) {
     d3.select("#icon-weather").style("display", null);
     // show/hide rain or sun
     if (foundWeather === "Rainy" || foundWeather === "Drizzle") {
-      d3.selectAll("#weather-rain circle").style("display", null);
+      d3.select("#weather-rain").style("display", null);
       d3.select("#weather-sun").style("display", "none");
     } else if (foundWeather === "Partly Cloudy") {
-      d3.selectAll("#weather-rain circle").style("display", "none");
+      d3.select("#weather-rain").style("display", "none");
       d3.select("#weather-sun").style("display", null);
     } else {
-      d3.selectAll("#weather-rain circle").style("display", "none");
+      d3.select("#weather-rain").style("display", "none");
       d3.select("#weather-sun").style("display", "none");
     }
   } else {
@@ -638,7 +685,7 @@ function resetIconPanel() {
   d3.select("#icon-scooter").style("display", "none");
   d3.select("#icon-bike").style("display", "none");
   d3.select("#icon-weather").style("display", "none");
-  d3.selectAll("#weather-rain circle").style("display", "none");
+  d3.select("#weather-rain").style("display", "none");
   d3.select("#weather-sun").style("display", "none");
   d3.select("#icon-speed").style("display", "none");
   d3.select("#speed-needle").attr("transform", "rotate(20,48,60)");
