@@ -496,128 +496,94 @@ function drawLegend() {
 
 // ---------------- Icon panel: create/update/reset -----------------
 function createIconPanel() {
-  // create an SVG inside the #iconPanel div
-  var w = 140, h = 600;
+  // create an SVG inside the #iconPanel div - horizontal layout
+  var w = 700, h = 100;
   var svg = d3.select("#iconPanel").append("svg")
       .attr("width", w)
       .attr("height", h);
 
-  // Person (always visible) - using image instead of vector art
-  var person = svg.append("g").attr("id", "icon-person").attr("transform", "translate(20,80)");
-  person.append("image")
-    .attr("xlink:href", "images/person.png")  // Update path to your image
-    .attr("x", 12)
-    .attr("y", 8)
-    .attr("width", 56)   // Same scale as original vector (combined width)
-    .attr("height", 92); // Same scale as original vector (head + body height)
-  person.append("text").attr("x", 70).attr("y", 54).attr("class","icon-label").text("Person");
+  var iconSpacing = 120; // horizontal spacing between icons
 
-  // Helmet (hidden unless Helmet Yes) - using image
-  var helmet = svg.append("g").attr("id", "icon-helmet").attr("transform", "translate(20,40)");
-  helmet.append("image")
-    .attr("xlink:href", "images/helmet.png")  // Update path to your image
-    .attr("x", 10)
-    .attr("y", 30)
-    .attr("width", 52)   // Same scale as original path width
-    .attr("height", 24); // Same scale as original path height
-  helmet.append("text").attr("x", 70).attr("y", 54).attr("class","icon-label").text("Helmet");
-  helmet.style("display", "none");
-
-  // Scooter - using image
-  var scooter = svg.append("g").attr("id", "icon-scooter").attr("transform", "translate(0,160)");
-  scooter.append("image")
-    .attr("xlink:href", "images/scooter.png")  // Update path to your image
-    .attr("x", 10)
-    .attr("y", 28)
-    .attr("width", 60)   // Same scale as original (body + wheels)
-    .attr("height", 36); // Same scale as original
-  scooter.append("text").attr("x", 70).attr("y", 54).attr("class","icon-label").text("Scooter");
-  scooter.style("display", "none");
-
-  // Bike - using image
-  var bike = svg.append("g").attr("id", "icon-bike").attr("transform", "translate(0,220)");
-  bike.append("image")
-    .attr("xlink:href", "images/bike.png")  // Update path to your image
-    .attr("x", 10)
-    .attr("y", 32)
-    .attr("width", 64)   // Same scale as original (two wheels + frame)
-    .attr("height", 48); // Same scale as original
-  bike.append("text").attr("x", 70).attr("y", 74).attr("class","icon-label").text("Bike");
-  bike.style("display", "none");
-
-  // Weather - using images for different weather conditions
-  var weather = svg.append("g").attr("id", "icon-weather").attr("transform", "translate(0,8)");
-  // Cloud image (base weather icon)
-  weather.append("image")
-    .attr("id", "weather-cloud")
-    .attr("xlink:href", "images/cloud.png")  // Update path to your image
-    .attr("x", 14)
-    .attr("y", 8)
-    .attr("width", 56)   // Same scale as original cloud ellipses
-    .attr("height", 28);
-  // Rain overlay (shown for rainy/drizzle)
-  weather.append("image")
-    .attr("id", "weather-rain")
-    .attr("xlink:href", "images/rain.png")  // Update path to your image
-    .attr("x", 28)
-    .attr("y", 32)
-    .attr("width", 36)   // Same scale as original raindrops
-    .attr("height", 12)
-    .style("display", "none");
-  // Sun overlay (shown for partly cloudy)
-  weather.append("image")
-    .attr("id", "weather-sun")
-    .attr("xlink:href", "images/sun.png")  // Update path to your image
-    .attr("x", 12)
-    .attr("y", 0)
-    .attr("width", 16)   // Same scale as original sun circle
-    .attr("height", 16)
-    .style("display", "none");
-  weather.append("text").attr("x", 70).attr("y", 34).attr("class","icon-label").text("Weather");
-  weather.style("display", "none");
-
-  // Speedometer - using image
-  var speed = svg.append("g").attr("id", "icon-speed").attr("transform", "translate(0,320)");
-  speed.append("image")
-    .attr("xlink:href", "images/speedometer.png")  // Update path to your image
-    .attr("x", 12)
-    .attr("y", 12)
-    .attr("width", 72)   // Same scale as original arc
-    .attr("height", 60);
-  // Optional: Keep needle as SVG for animation, or use rotated image
-  speed.append("line")
-    .attr("id","speed-needle")
-    .attr("x1",48).attr("y1",60)
-    .attr("x2",48).attr("y2",22)
-    .style("stroke","#d62728")
-    .style("stroke-width",3)
-    .attr("transform","rotate(20,48,60)");
-  speed.append("text").attr("x", 70).attr("y", 64).attr("class","icon-label").text("Speed");
-  speed.style("display", "none");
-
-  // Location pin - using image
-  var location = svg.append("g").attr("id", "icon-location").attr("transform", "translate(0,400)");
+  // Building/Location (first position) - using image
+  var location = svg.append("g").attr("id", "icon-location").attr("transform", "translate(0,5)");
   location.append("image")
     .attr("xlink:href", "images/location.png")  // Update path to your image
-    .attr("x", 32)
-    .attr("y", 14)
-    .attr("width", 32)   // Same scale as original pin
-    .attr("height", 32);
-  location.append("text").attr("id","location-label").attr("x", 70).attr("y", 34).attr("class","icon-label").text("");
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", 60)
+    .attr("height", 75);
   location.style("display", "none");
+
+  // Helmet (hidden unless Helmet Yes) - using image
+  var helmet = svg.append("g").attr("id", "icon-helmet").attr("transform", "translate(" + (iconSpacing * 1) + ",5)");
+  helmet.append("image")
+    .attr("xlink:href", "images/helmet.png")  // Update path to your image
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", 70)
+    .attr("height", 50);
+  helmet.style("display", "none");
+
+  // Bike - using image
+  var bike = svg.append("g").attr("id", "icon-bike").attr("transform", "translate(" + (iconSpacing * 2) + ",5)");
+  bike.append("image")
+    .attr("xlink:href", "images/bike.png")  // Update path to your image
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", 80)
+    .attr("height", 60);
+  bike.style("display", "none");
+
+  // Scooter - using image
+  var scooter = svg.append("g").attr("id", "icon-scooter").attr("transform", "translate(" + (iconSpacing * 2) + ",5)");
+  scooter.append("image")
+    .attr("xlink:href", "images/scooter.png")  // Update path to your image
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", 80)
+    .attr("height", 60);
+  scooter.style("display", "none");
+
+  // Speedometer - using image with needle
+  var speed = svg.append("g").attr("id", "icon-speed").attr("transform", "translate(" + (iconSpacing * 3) + ",5)");
+  speed.append("image")
+    .attr("xlink:href", "images/speedometer.png")  // Update path to your image
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", 80)
+    .attr("height", 70);
+  // Add needle line for speed indicator
+  speed.append("line")
+    .attr("id","speed-needle")
+    .attr("x1", 40)
+    .attr("y1", 55)
+    .attr("x2", 40)
+    .attr("y2", 20)
+    .style("stroke","#d62728")
+    .style("stroke-width", 3)
+    .attr("transform","rotate(0, 40, 55)");
+  speed.style("display", "none");
+
+  // Person (always visible, last position) - using image instead of vector art
+  var person = svg.append("g").attr("id", "icon-person").attr("transform", "translate(" + (iconSpacing * 4) + ",0)");
+  person.append("image")
+    .attr("xlink:href", "images/person.png")  // Update path to your image
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", 55)
+    .attr("height", 95);
+  person.style("display", "none");
 }
 
 function updateIconPanel(nodeArray) {
   // nodeArray is highest-first array of ancestor nodes (excludes root)
   if (!nodeArray) return;
-  // show person always
-  d3.select("#icon-person").style("display", null);
 
-  // VEHICLE
-  var hasScooter = nodeArray.some(function(n){ return n.name === "Scooter"; });
+  // VEHICLE (Bike or Scooter - show appropriate icon)
   var hasBike = nodeArray.some(function(n){ return n.name === "Bike"; });
-  d3.select("#icon-scooter").style("display", hasScooter ? null : "none");
+  var hasScooter = nodeArray.some(function(n){ return n.name === "Scooter"; });
   d3.select("#icon-bike").style("display", hasBike ? null : "none");
+  d3.select("#icon-scooter").style("display", hasScooter ? null : "none");
 
   // HELMET
   var hasHelmetYes = nodeArray.some(function(n){ return n.name === "Helmet Yes"; });
@@ -631,37 +597,15 @@ function updateIconPanel(nodeArray) {
   }
   if (foundSpeed) {
     d3.select("#icon-speed").style("display", null);
-    var angle = 20; // default Normal
-    if (foundSpeed === "Low Speed") angle = -60;
-    else if (foundSpeed === "Med Speed") angle = -20;
-    else if (foundSpeed === "Normal Speed") angle = 20;
-    else if (foundSpeed === "High Speed") angle = 60;
-    d3.select("#speed-needle").attr("transform", "rotate("+angle+",48,60)");
+    // Rotate needle based on speed
+    var angle = 0; // default
+    if (foundSpeed === "Low Speed") angle = -45;
+    else if (foundSpeed === "Med Speed") angle = -15;
+    else if (foundSpeed === "Normal Speed") angle = 15;
+    else if (foundSpeed === "High Speed") angle = 45;
+    d3.select("#speed-needle").attr("transform", "rotate("+angle+", 40, 55)");
   } else {
     d3.select("#icon-speed").style("display", "none");
-  }
-
-  // WEATHER
-  var weatherTypes = ["Drizzle","Cloudy","Rainy","Overcast","Partly Cloudy"];
-  var foundWeather = null;
-  for (var j=0;j<weatherTypes.length;j++) {
-    if (nodeArray.some(function(n){ return n.name === weatherTypes[j]; })) { foundWeather = weatherTypes[j]; break; }
-  }
-  if (foundWeather) {
-    d3.select("#icon-weather").style("display", null);
-    // show/hide rain or sun
-    if (foundWeather === "Rainy" || foundWeather === "Drizzle") {
-      d3.select("#weather-rain").style("display", null);
-      d3.select("#weather-sun").style("display", "none");
-    } else if (foundWeather === "Partly Cloudy") {
-      d3.select("#weather-rain").style("display", "none");
-      d3.select("#weather-sun").style("display", null);
-    } else {
-      d3.select("#weather-rain").style("display", "none");
-      d3.select("#weather-sun").style("display", "none");
-    }
-  } else {
-    d3.select("#icon-weather").style("display", "none");
   }
 
   // LOCATION
@@ -672,23 +616,23 @@ function updateIconPanel(nodeArray) {
   }
   if (foundLocation) {
     d3.select("#icon-location").style("display", null);
-    d3.select("#location-label").text(foundLocation);
   } else {
     d3.select("#icon-location").style("display", "none");
   }
+
+  // Show person icon only if at least one other icon is showing
+  var anyIconVisible = hasBike || hasScooter || hasHelmetYes || foundSpeed || foundLocation;
+  d3.select("#icon-person").style("display", anyIconVisible ? null : "none");
 }
 
 function resetIconPanel() {
-  // person stays visible; hide everything else
-  d3.select("#icon-person").style("display", null);
+  // hide all icons including person
+  d3.select("#icon-person").style("display", "none");
   d3.select("#icon-helmet").style("display", "none");
-  d3.select("#icon-scooter").style("display", "none");
   d3.select("#icon-bike").style("display", "none");
-  d3.select("#icon-weather").style("display", "none");
-  d3.select("#weather-rain").style("display", "none");
-  d3.select("#weather-sun").style("display", "none");
+  d3.select("#icon-scooter").style("display", "none");
   d3.select("#icon-speed").style("display", "none");
-  d3.select("#speed-needle").attr("transform", "rotate(20,48,60)");
+  d3.select("#speed-needle").attr("transform", "rotate(0, 30, 40)");
   d3.select("#icon-location").style("display", "none");
 }
 
